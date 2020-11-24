@@ -1,17 +1,31 @@
 import React, { useState, useEffect } from "react";
+import { connect } from 'react-redux';
 import CardList from "../components/CardList";
 import SearchBox from "../components/SearchBox.js";
 import Scroll from "../components/Scroll";
 import ErrorBoundary from "../components/ErrorBoundary";
 import "./App.css";
 
-const App = () => {
+import { setSearchField } from '../actions';
+
+const mapStateToProps = state => {
+  return {
+    searchField: state.searchField
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return { onSearchChange: (event) => dispatch(setSearchField(event.target.value)) }
+}
+
+const App = (props) => {
   const [robots, setRobots] = useState([]);
-  const [searchfield, setSearchfield] = useState("");
+  const {searchField, onSearchChange} = props;
+  // const [searchfield, setSearchfield] = useState("");
   const [count, setCount] = useState(0);
 
   const filteredRobots = robots.filter((robot) => {
-    return robot.name.toLowerCase().includes(searchfield.toLowerCase());
+    return robot.name.toLowerCase().includes(searchField.toLowerCase());
   });
 
   useEffect(() => {
@@ -22,19 +36,19 @@ const App = () => {
       .then((users) => {
         setRobots(users);
       });
-      console.log(count);
+    console.log(count);
   }, [count])
 
-  const onSearchChange = (e) => {
-    setSearchfield(e.target.value);
-  }
+  // const onSearchChange = (e) => {
+  //   setSearchfield(e.target.value);
+  // }
 
   return !robots.length ? (
     <h1>Loading</h1>
   ) : (
       <div className="tc">
         <h1 className="f1">RoboFriends</h1>
-        <button onClick={() => setCount(count+1)}>Click Me!</button>
+        <button onClick={() => setCount(count + 1)}>Click Me!</button>
         <SearchBox searchChange={onSearchChange} />
         <Scroll>
           <ErrorBoundary>
@@ -45,4 +59,4 @@ const App = () => {
     );
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
