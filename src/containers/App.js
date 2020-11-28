@@ -21,8 +21,6 @@ const mapDispatchToProps = (dispatch) => {
 const App = (props) => {
   const [robots, setRobots] = useState([]);
   const {searchField, onSearchChange} = props;
-  // const [searchfield, setSearchfield] = useState("");
-  const [count, setCount] = useState(0);
 
   const filteredRobots = robots.filter((robot) => {
     return robot.name.toLowerCase().includes(searchField.toLowerCase());
@@ -36,8 +34,7 @@ const App = (props) => {
       .then((users) => {
         setRobots(users);
       });
-    console.log(count);
-  }, [count])
+  }, [])
 
   // const onSearchChange = (e) => {
   //   setSearchfield(e.target.value);
@@ -48,7 +45,6 @@ const App = (props) => {
   ) : (
       <div className="tc">
         <h1 className="f1">RoboFriends</h1>
-        <button onClick={() => setCount(count + 1)}>Click Me!</button>
         <SearchBox searchChange={onSearchChange} />
         <Scroll>
           <ErrorBoundary>
